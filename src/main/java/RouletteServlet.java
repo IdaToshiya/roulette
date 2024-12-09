@@ -1,6 +1,4 @@
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.PrintWriter;
 
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -10,41 +8,23 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/RouletteServlet")
 public class RouletteServlet extends HttpServlet {
-    @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-        // リクエストの内容を取得
-        StringBuilder jsonData = new StringBuilder();
-        try (BufferedReader reader = request.getReader()) {
-            String line;
-            while ((line = reader.readLine()) != null) {
-                jsonData.append(line);
-            }
-        }
+    protected void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        // リクエストとレスポンスの文字コードをUTF-8に設定
+        request.setCharacterEncoding("UTF-8");
+        response.setContentType("text/html; charset=UTF-8");
 
-        // JSONデータを解析 (GsonやJacksonを使わない方法)
-        String winningNumber = null;
-        String jsonString = jsonData.toString();
-        if (jsonString.contains("\"winningNumber\"")) {
-            winningNumber = jsonString.split(":")[1].replace("}", "").replace("\"", "").trim();
-        }
+        String result = request.getParameter("result");
 
-        // データの処理 (例: データベースに保存するなど)
-        if (winningNumber != null) {
-            System.out.println("受け取った当選番号: " + winningNumber);
+        // ログ出力（デバッグ用）
+        System.out.println("受け取った結果: " + result);
+
+        if (result == null || result.isEmpty()) {
+            response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+            response.getWriter().write("エラー: 結果が送信されていません。");
         } else {
-            System.err.println("当選番号の解析に失敗しました");
-        }
-
-        // レスポンスを返す
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            if (winningNumber != null) {
-                out.print("{\"message\": \"結果が保存されました: " + winningNumber + "\"}");
-            } else {
-                out.print("{\"message\": \"結果の保存に失敗しました\"}");
-            }
-            out.flush();
+            response.setStatus(HttpServletResponse.SC_OK);
+            response.getWriter().write("結果がサーバーに保存されました: " + result);
         }
     }
 }

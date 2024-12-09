@@ -71,56 +71,57 @@ document.addEventListener("DOMContentLoaded", () => {
         ctx.stroke();
     }
 
-    // ルーレットを回す
-    function spinRoulette() {
-        if (isSpinning) return; // 現在回転中の場合は無視
-        isSpinning = true;
-        spinSpeed = Math.random() * 10 + 20; // ランダムな初期速度
+	function spinRoulette() {
+	    if (isSpinning) return; // 現在回転中の場合は無視
+	    isSpinning = true;
+	    spinSpeed = Math.random() * 10 + 20; // ランダムな初期速度
 
-        const spinInterval = setInterval(() => {
-            angle += spinSpeed * Math.PI / 180; // 角度を増加
-            drawWheel();
-            drawArrow();
-            spinSpeed *= 0.98; // 回転速度を減速
-            if (spinSpeed < 0.1) {
-                clearInterval(spinInterval);
-                isSpinning = false;
-                showResult();
-            }
-        }, 20);
-    }
+	    const spinInterval = setInterval(() => {
+	        angle += spinSpeed * Math.PI / 180; // 角度を増加
+	        drawWheel();
+	        drawArrow();
+	        spinSpeed *= 0.98; // 回転速度を減速
+	        if (spinSpeed < 0.1) {
+	            clearInterval(spinInterval);
+	            isSpinning = false;
+	            showResult(); // 回転が終了した後に結果を表示
+	        }
+	    }, 20);
+	}
 
-    function sendResultToServer(result) {
-        fetch('RouletteServlet', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({ winningNumber: result }),
-        })
-        .then(response => response.json())
-        .then(data => {
-            console.log('サーバーからのレスポンス:', data);
-            alert(`サーバーに結果が保存されました: ${data.message}`);
-        })
-        .catch(error => console.error('送信エラー:', error));
-    }
+	function showResult() {
+	    const sectorAngle = 2 * Math.PI / sectors;
+	    const finalAngle = (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
+	    const winningSector = Math.floor((sectors - finalAngle / sectorAngle) % sectors);
 
-    // 結果を判定してサーバーに送信
-    function showResult() {
-        const sectorAngle = 2 * Math.PI / sectors;
-        const finalAngle = (angle % (2 * Math.PI) + 2 * Math.PI) % (2 * Math.PI);
-        const winningSector = Math.floor((sectors - finalAngle / sectorAngle) % sectors);
+	    const result = sectorNumbers[winningSector];
+	    sendResultToServer(result); // 結果をサーブレットに送信
 
-        const result = sectorNumbers[winningSector];
-        sendResultToServer(result);
+	    alert(`当選番号: ${result}`);
+	    drawArrow();
+	}
 
-        alert(`当選番号: ${result}`);
-        drawArrow();
-    }
+	function sendResultToServer(result) {
+	    fetch('RouletteServlet', {
+	        method: 'POST',
+	        headers: {
+	            'Content-Type': 'application/x-www-form-urlencoded',
+	        },
+	        body: `result=${encodeURIComponent(result)}`,
+	    })
+	    .then(response => {
+	        if (!response.ok) {
+	            throw new Error(`HTTP error! Status: ${response.status}`);
+	        }
+	        return response.text();
+	    })
+	    .then(data => console.log("サーバーの応答:", data))
+	    .catch(error => alert("サーバー通信に失敗しました: " + error.message));
+	}
+
 
     drawWheel();
     drawArrow();
 
-    document.querySelector("button[onclick='spinRoulette()']").addEventListener("click", spinRoulette);
+	document.getElementById("spinButton").addEventListener("click", spinRoulette);
 });

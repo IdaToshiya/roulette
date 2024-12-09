@@ -1,4 +1,6 @@
-<%@ page contentType="text/html; charset=UTF-8"%>
+<%@ page contentType="text/html; charset=UTF-8" %>
+<%@ page pageEncoding="UTF-8" %>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -77,8 +79,8 @@
         <canvas id="rouletteCanvas"></canvas>
      </div>
         <button type="submit">ベットを送信</button>
-        <button type="button" onclick="spinRoulette()">ルーレットを回す</button>
     </form>
+    <button id="spinButton">スピン</button>
     <script src="scripts.js"></script>
 </body>
 </html>
