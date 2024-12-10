@@ -10,7 +10,7 @@
 <body>
     <h1>ルーレットベットテーブル</h1>
     <div class="flex-container">
-       <form action="RouletteServlet" method="post" id="betForm">
+       <form action="BetServlet" method="post" id="betForm">
         <div class="bet-table">
             <!-- 0と00の領域 -->
             <div class="row">
@@ -81,6 +81,7 @@
         <button type="submit">ベットを送信</button>
     </form>
     <button id="spinButton">スピン</button>
+    <p>${betValues}</p>
     <script src="scripts.js"></script>
 </body>
 </html>
