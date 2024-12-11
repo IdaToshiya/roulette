@@ -93,7 +93,7 @@ document.addEventListener("DOMContentLoaded", () => {
         const result = sectorNumbers[winningSector];
         sendResultToServer(result); // 結果をサーブレットに送信
 
-        alert(`当選番号: ${result}`);
+//        alert(`当選番号: ${result}`);
     }
 
     function sendResultToServer(result) {

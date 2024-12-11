@@ -6,9 +6,9 @@ body {
     padding: 20px;
 }
 
-.flex-container {
-  
-  align-items: flex-end;
+#flex-container {
+  display: flex;;
+  align-items: center;
   justify-content: center;
   margin: 10px;
  
@@ -21,8 +21,8 @@ body {
 }
 
 .bet-table {
-	display: flex/inline-flex;
-    display: inline-block;
+/*	display: flex/inline-flex;*/
+/*    display: inline-block;*/
 	align-items: center;
 /*    margin: 20px auto;*/
 /*    border: 2px solid #000;*/

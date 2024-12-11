@@ -9,6 +9,7 @@
 </head>
 <body>
 	<h1>ルーレット</h1>
+	<p>結果：${result}</p>
 	
 	<div class="roulette-container">
         <div class="roulette" id="roulette">
