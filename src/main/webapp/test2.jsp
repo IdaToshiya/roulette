@@ -1,5 +1,6 @@
 <%@ page contentType="text/html; charset=UTF-8" %>
 <%@ page pageEncoding="UTF-8" %>
+<%@taglib prefix="c" uri="jakarta.tags.core" %>
 
 <!DOCTYPE html>
 <html>
@@ -84,12 +85,21 @@
     	</form>
     
     <button id="spinButton" method="post">スピン</button>
-    <p>結果：${sessionScope.result}</p>
-    <script type="text/javascript">
-    <%
     
-    %>
-    </script>
+    <form action="ResultServlet" method="post" id="betForm">
+    	<button type="submit">結果</button>
+    </form>
+    
+    <p>ベット: 
+    <c:forEach var="betValue" items="${sessionScope.betValues}">
+        ${betValue} 
+    </c:forEach>
+	</p>
+   	<p>スピン結果: ${sessionScope.result}</p>
+	<p>ベット結果: ${sessionScope.resultMessage}</p>
+
+   	
+
     <script src="scripts.js"></script>
 </body>
 </html>

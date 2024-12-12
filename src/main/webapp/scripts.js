@@ -92,17 +92,15 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const result = sectorNumbers[winningSector];
         sendResultToServer(result); // 結果をサーブレットに送信
-
-//        alert(`当選番号: ${result}`);
     }
 
     function sendResultToServer(result) {
-        fetch('RouletteServlet', {
+        fetch('/roulette/RouletteServlet', { // サーブレットへの正しいURLを指定
             method: 'POST',
             headers: {
                 'Content-Type': 'application/x-www-form-urlencoded',
             },
-            body: `result=${encodeURIComponent(result)}`,
+            body: `result=${encodeURIComponent(result)}`
         })
         .then(response => {
             if (!response.ok) {

@@ -13,7 +13,6 @@ import jakarta.servlet.http.HttpServletResponse;
 
 @WebServlet("/StartGameServlet")
 public class StartGameServlet extends HttpServlet {
-    private static final String DB_URL = "jdbc:sqlite:/path/to/your/database.db";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
@@ -31,7 +30,6 @@ public class StartGameServlet extends HttpServlet {
                     // テーブル作成（存在しない場合のみ）
                     String createTableSQL = "CREATE TABLE IF NOT EXISTS results ("
                     		+ "id INTEGER PRIMARY KEY AUTOINCREMENT,"
-                    		+ "game_id INTEGER,"
                     		+ "winning_number TEXT NOT NULL,"
                     		+ "winning_color TEXT NOT NULL,"
                     		+ "date TIMESTAMP DEFAULT CURRENT_TIMESTAMP)";
@@ -55,6 +53,7 @@ public class StartGameServlet extends HttpServlet {
                 // ゲームIDをセッションに保存
                 request.getSession().setAttribute("currentGameId", gameId);
                 request.getRequestDispatcher("/BetServlet").forward(request, response);
+                
             }
             
         } catch (Exception e) {

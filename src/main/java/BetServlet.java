@@ -9,6 +9,7 @@ import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.HttpSession;
 
 @WebServlet("/BetServlet")
 public class BetServlet extends HttpServlet {
@@ -55,8 +56,11 @@ public class BetServlet extends HttpServlet {
                         }
                         pstmt.executeBatch();
                     }
-                    request.setAttribute("betValues", betValues);
-        			request.getRequestDispatcher("test2.jsp").forward(request, response);
+                    // セッションスコープに設定
+	                HttpSession session1 = request.getSession();
+	                session1.setAttribute("gameId", gameId);
+	                session1.setAttribute("betValues", betValues);
+	                request.getRequestDispatcher("/test2.jsp").forward(request, response);
                 }
             }
         } catch (ClassNotFoundException e) {
